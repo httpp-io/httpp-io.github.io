@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>httpp:// - HyperText Transfer Proof Protocol</title>
+        <style>
+            body {
+                background-color: black;
+                color: white;
+                font-family: Arial, sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0;
+                padding: 32px;
+                height: calc(100dvh - 64px);
+            }
+            #container {
+                display: flex;
+                flex: 1;
+                align-items: center;
+                flex-direction: row;
+                gap: 8px;
+            }
+            #text-container {
+                font-size: 2em;
+                position: relative;
+            }
+            #caret {
+                position: absolute;
+                right: -3px;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background-color: white;
+                animation: blink 0.7s infinite;
+            }
+            @keyframes blink {
+                0%,
+                100% {
+                    opacity: 0;
+                }
+                50% {
+                    opacity: 1;
+                }
+            }
+            #footer {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+            }
+            #footer > div {
+                text-align: center;
+                font-size: 0.8em;
+            }
+            #footer a {
+                color: white;
+                text-decoration: none;
+                font-weight: 600;
+            }
+            #container > svg {
+                color: #52e152;
+                height: 30px;
+            }
+            body > svg {
+                height: 200px;
+                width: 200px;
+            }
+            #protocol {
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body>
+        <svg viewBox="0 0 105.83333 105.83333" xmlns="http://www.w3.org/2000/svg">
+            <path
+                style="fill: #ffffff; stroke-width: 0.264583;"
+                d="m 16.933327,-5.0862632e-6 h 71.966679 c 9.381066,0 16.933334,7.5522662862632 16.933334,16.9333320862632 v 71.966679 c 0,9.381066 -7.552268,16.933334 -16.933334,16.933334 H 16.933327 C 7.5522612,105.83334 -5.0862632e-6,98.281072 -5.0862632e-6,88.900006 V 16.933327 C -5.0862632e-6,7.5522612 7.5522612,-5.0862632e-6 16.933327,-5.0862632e-6 Z"
+            />
+            <path
+                d="m 23.4167,60.710223 -2.281764,-1.570565 3.555996,-4.800594 -5.541427,-1.866898 0.829732,-2.548464 5.511794,1.866898 v -5.92666 h 2.844797 v 5.92666 l 5.511794,-1.866898 0.829732,2.548464 -5.541427,1.866898 3.555996,4.800594 -2.281764,1.570565 -3.496729,-4.800594 z m 21.276721,1.718732 q -1.422399,0 -2.015065,-0.592666 -0.563032,-0.592666 -0.563032,-1.452032 v -0.770466 q 0,-0.859366 0.563032,-1.452032 0.592666,-0.592666 2.015065,-0.592666 1.422398,0 1.985431,0.592666 0.592666,0.592666 0.592666,1.452032 v 0.770466 q 0,0.859366 -0.592666,1.452032 -0.563033,0.592666 -1.985431,0.592666 z m 0,-11.023588 q -1.422399,0 -2.015065,-0.592666 -0.563032,-0.592666 -0.563032,-1.452032 v -0.770466 q 0,-0.859365 0.563032,-1.452031 0.592666,-0.592666 2.015065,-0.592666 1.422398,0 1.985431,0.592666 0.592666,0.592666 0.592666,1.452031 v 0.770466 q 0,0.859366 -0.592666,1.452032 -0.563033,0.592666 -1.985431,0.592666 z m 11.349565,14.81665 9.986422,-26.610704 h 2.87443 l -9.986422,26.610704 z m 17.779991,0 9.986422,-26.610704 h 2.87443 l -9.986422,26.610704 z"
+            />
+        </svg>
+
+        <div id="container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path
+                    fill="currentColor"
+                    d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"
+                />
+            </svg>
+            <div id="text-container"><span id="protocol">httpp://</span><span id="domain"></span><span id="caret"></span></div>
+        </div>
+
+        <div id="footer">
+            <div>Prove your private Web2 (HTTPS) data provenance safely. Send it directly to your counterparty or bring it on-chain in decentralized way.</div>
+            <div>Follow us on X (Twitter) <a href="https://x.com/httpp_io">@httpp_io</a> to stay up to date.</div>
+        </div>
+
+        <script>
+            var domains = ["anything", "coinbase.com", "x.com", "revolut.com", "binance.com", "discord.com", "venmo.com", "okx.com"];
+
+            var currentDomainIndex = 0;
+            var currentCharIndex = 0;
+            var isDeleting = false;
+            var typingSpeed = 150;
+            var deletingSpeed = 75;
+            var pauseBetweenWords = 1000;
+
+            function typeText() {
+                var currentDomain = domains[currentDomainIndex];
+                var domainElement = document.getElementById("domain");
+
+                if (isDeleting) {
+                    domainElement.textContent = currentDomain.substring(0, currentCharIndex - 1);
+                    currentCharIndex--;
+                } else {
+                    domainElement.textContent = currentDomain.substring(0, currentCharIndex + 1);
+                    currentCharIndex++;
+                }
+
+                if (!isDeleting && currentCharIndex === currentDomain.length) {
+                    isDeleting = true;
+                    setTimeout(typeText, pauseBetweenWords);
+                } else if (isDeleting && currentCharIndex === 0) {
+                    isDeleting = false;
+                    currentDomainIndex = (currentDomainIndex + 1) % domains.length;
+                    setTimeout(typeText, typingSpeed);
+                } else {
+                    setTimeout(typeText, isDeleting ? deletingSpeed : typingSpeed);
+                }
+            }
+
+            typeText();
+        </script>
+    </body>
+</html>
